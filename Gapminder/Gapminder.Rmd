@@ -1,0 +1,132 @@
+---
+title: "Gapminder"
+output: 
+  html_notebook:
+    toc: true
+    toc_float:
+      collapsed: false
+    theme: cosmo
+    highlight: breezedark
+    
+author: "Ashish Yadav"
+---
+
+
+## Load and explore data
+Lets take a look at the structure of the dataset to get a sense
+
+```{r}
+library(dslabs)
+library(tidyverse)
+data(gapminder)
+gapminder %>% head()
+str(gapminder)
+```
+
+**Data consists of 10545 Observations and 9 Variables**
+
+**Add gdp_cp var i.e. gdp per capita which represents the wealth of a country**
+
+```{r}
+gapminder <- gapminder %>% mutate(gdp_pc = gdp / population, dollars_per_day = gdp_pc/365)
+head(gapminder)
+```
+
+## Analysis
+### Compare infant mortality in Sri Lanka and Turkey in 2015
+```{r}
+gapminder %>%
+    filter(year == 2015 & country %in% c("Sri Lanka", "Turkey")) %>%
+    select(country, infant_mortality)
+```
+
+### Scatterplot of life expectancy versus fertility in year 1962
+```{r}
+ds_theme_set()
+gapminder %>%
+    filter(year == 1962) %>%
+    ggplot(aes(fertility, life_expectancy)) +
+    geom_point(size = 1) +
+    ylab("Life Expectancy") +
+    xlab("Fertility")
+```
+
+ It is uclear from the  plot, which countries had a high life expactency in the year 1962
+ scatterplot with color based on the continent i.e. catagorizing the date into continents
+ 
+```{r}
+gapminder %>%
+    filter(year == 1962) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point(size = 1) +
+    ylab("Life Expectancy") +
+    xlab("Fertility")
+```
+
+### Faceting
+Facet life expectancy vs fertility by continent and year to see how it changed from 1962 to 2012 for different continents
+
+```{r}
+gapminder %>% filter(year %in% c("1962", "2012")) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point(size = 1) +
+    facet_grid(continent ~ year) +
+    ylab("Life Expectancy") +
+    xlab("Fertility")
+```
+
+Except for countries in Africa continent almost all of the countries had significant increase in life expectancy and reduced fertility and Europian countries has the most significant increase of all thus **It's quite clear from the plot, notion that Europian and American countries have a higher life-expectancy is somewhat correct
+
+### Facet by year only
+```{r}
+gapminder %>% filter(year %in% c("1962", "2012")) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point(size = 1) +
+    facet_grid(.~ year) +
+    ylab("Life Expectancy") +
+    xlab("Fertility")
+```
+
+Faceting by year 1962 and 2012 shows, though all of the countries had a increase in life-expectancy, European and American countries had the highest life-expectancy
+
+**Facet by year, plots wrapped onto multiple rows to see changes over the years in life-expectancy**
+
+```{r}
+y <- c("1962", "1980", "1990", "2000", "2012")
+c <- c("Europe", "Asia")
+gapminder %>% filter(year %in% y & continent %in% c) %>%
+    ggplot(aes(fertility, life_expectancy, col = continent)) +
+    geom_point(size = 1) +
+    facet_wrap(~year) +
+    ylab("Life Expectancy") +
+    xlab("Fertility")
+```
+
+## Compare fertility of various countries
+### US fertility
+```{r}
+gapminder %>%
+    filter(country == "United States", !is.na(fertility)) %>%
+    ggplot(aes(year, fertility)) +
+    geom_point()
+```
+
+### Line plot - US fertility
+```{r}
+gapminder %>%
+    filter(country == "United States", !is.na(fertility)) %>%
+    ggplot(aes(year, fertility)) +
+    geom_line()
+```
+
+### Line plot - Korea and Germany
+
+```{r}
+countries <- c("South Korea", "Germany")
+labels <- data.frame(country = countries, x = c(1986, 1975), y = c(2.5,2.0))
+gapminder %>% filter(country %in% countries & !is.na(fertility)) %>%
+    ggplot(aes(year, fertility, col = country)) +
+    geom_text(data = labels, aes(x, y, label = country), size = 4) +
+    theme(legend.position = "none") +
+    geom_line()
+```
