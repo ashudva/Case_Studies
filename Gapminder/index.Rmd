@@ -1,14 +1,16 @@
 ---
 title: "Gapminder"
-output: 
-  html_notebook:
-    toc: true
-    toc_float:
-      collapsed: false
-    theme: cosmo
-    highlight: breezedark
-    
 author: "Ashish Yadav"
+output:
+  html_notebook:
+    output:
+      toc: yes
+      toc_float: null
+  highlight: breezedark
+  collapsed: no
+  html_document:
+    df_print: paged
+  theme: cosmo
 ---
 
 

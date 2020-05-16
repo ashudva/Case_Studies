@@ -1,0 +1,17 @@
+name: "Gapminder"
+navbar:
+  title: "AshishDev"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "ML"
+      href: https://ashishdev.tech
+    - text: "HAR"
+      href: https://har.ashishdev.tech
+output: 
+  html_notebook:  
+    toc: true
+    toc_float:
+      collapsed: false
+    theme: cosmo
+    highlight: breezedark
