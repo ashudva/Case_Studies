@@ -12,7 +12,7 @@ output:
     df_print: paged
   theme: cosmo
 ---
-
+The objective of this case study is to understand the change in World Health and Economics using Data Visualization, EDA, and Summarization. In this study two main questions, *Is it a fair characterization of today's world to say that it is divided into a Westorn Rich Nations (Europian Countries, USA et cetera), and Developing Countries (Asia, Africa et cetera)? Has the **Income Inequality** worsened during the last 40 years?* The study involves data from Gapminder Foundation about trends in world health and economics. Study emphasizes the use of data visualization to better understand the trends and insights. This study is purely based on the Gapminder TED talks **New Insights on poverty**
 
 ## Load and explore data
 Lets take a look at the structure of the dataset to get a sense
