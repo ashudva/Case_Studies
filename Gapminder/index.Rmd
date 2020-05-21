@@ -15,7 +15,6 @@ output:
 The objective of this case study is to understand the change in World Health and Economics using Data Visualization, EDA, and Summarization. In this study two main questions, *Is it a fair characterization of today's world to say that it is divided into a Westorn Rich Nations (Europian Countries, USA et cetera), and Developing Countries (Asia, Africa et cetera)? Has the **Income Inequality** worsened during the last 40 years?* The study involves data from Gapminder Foundation about trends in world health and economics. Study emphasizes the use of data visualization to better understand the trends and insights. This study is purely based on the Gapminder TED talks **New Insights on poverty**
 
 ## Load and explore data
-Lets take a look at the structure of the dataset to get a sense
 
 ```{r}
 library(dslabs)
@@ -25,8 +24,7 @@ gapminder %>% head()
 str(gapminder)
 ```
 
-**Data consists of 10545 Observations and 9 Variables**
-
+**Data consists of 10545 Observations and 9 Variables**, it consists of varibles like *country*, *region*, health outcomes (*life_expectancy*, *fertility*), economic aspects (*gdp*), 
 **Add gdp_cp var i.e. gdp per capita which represents the wealth of a country**
 
 ```{r}
@@ -35,12 +33,36 @@ head(gapminder)
 ```
 
 ## Analysis
-### Compare infant mortality in Sri Lanka and Turkey in 2015
+### Compare mortality
+Getting started with testing our knowledge regarding differences in infant mortality across differnt countries, for each of the pairs of countries given below, **Which country do you think had the highest child mortality rate in 2015?** and **Which pairs do you think are the most similar?**
+
+|Country1 |Country2|
+|---------|--------|
+|Sri Lanka|Turkey  |
+|Poland|South Korea|
+|Malaysia|Russia|
+|Pakistan|Vietnam|
+|Thialand|South Africa|
+
+It is commonly percieved that the non-europian countries like Sri Lanka, South Korea have higher mortality rates than their Europian counterparts. Also the developing countries like Pakistan are considered to have high mortality rates. Lets take a look at the data to see whether it is just a superstition or a fact.
 ```{r}
-gapminder %>%
-    filter(year == 2015 & country %in% c("Sri Lanka", "Turkey")) %>%
-    select(country, infant_mortality)
+countries <- c("Sri Lanka","Turkey","Poland","South Korea","Malaysia","Russia","Pakistan","Vietnam","Thailand","South Africa")
+mortality <- data.frame()
+for (i in seq(1,10,2)) {
+    mortality1 <- gapminder %>%
+        filter(year == 2015 & country %in% countries[c(i,i+1)]) %>%
+        select(country, infant_mortality)
+    mortality1 <- cbind(mortality1[1,], mortality1[2,])
+    mortality1 <- mortality1[-2,]
+    mortality <- rbind.data.frame(mortality,mortality1)
+}
+names(mortality) <- c("Country1", "Mortality1", "Country2", "Mortality2")
+mortality
 ```
+We see that the European countries on this list have higher child mortality rates: Poland
+has a higher rate than South Korea, and Russia has a higher rate than Malaysia. We also
+see that Pakistan has a much higher rate than Vietnam, and South Africa has a much
+higher rate than Thailand.
 
 ### Scatterplot of life expectancy versus fertility in year 1962
 ```{r}
